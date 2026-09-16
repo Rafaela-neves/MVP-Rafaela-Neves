@@ -1,7 +1,5 @@
 MVP – Engenharia de Dados
 
-Análise do Desempenho Operacional de Entregas de Alimentos
-
 Rafaela Neves da Silva
 
 Pós-graduação em Ciência de Dados
