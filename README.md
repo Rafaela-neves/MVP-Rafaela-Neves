@@ -12,6 +12,7 @@ Disciplina: Engenharia de Dados
 1. Objetivo
    
 1.1 Problema a ser resolvido
+
 Este trabalho tem como propósito entender os principais padrões e fatores associados aos acidentes de trânsito nas rodovias federais brasileiras, de modo a apoiar a identificação de pontos críticos e situações de maior risco, contribuindo para o direcionamento de políticas de segurança viária.
 
 1.2 Perguntas de negócio
