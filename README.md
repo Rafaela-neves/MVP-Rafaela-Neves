@@ -304,31 +304,31 @@ O código completo desta análise está no notebook [`05_analise_negocio.ipynb`]
 
 ### 7.1 Pergunta 1 — BRs com maior número de acidentes e maior gravidade
 
-![Top 15 BRs por quantidade de acidentes](images/grafico1_brs.png)
+![Top 15 BRs por quantidade de acidentes](grafico1_brs.png)
 
 A BR-101 (37.426 acidentes) e a BR-116 (33.303) concentram o maior volume, muito à frente das demais, o que é coerente com sua extensão e alto tráfego. Entretanto, ao calcular o índice de gravidade (mortos por acidente), destacam-se a BR-316 (0,1685), BR-230 (0,1082) e BR-153 (0,0982) — todas com gravidade proporcional muito superior à BR-101 (0,0576), apesar do volume bem menor. Conclui-se que volume e letalidade por ocorrência são fenômenos distintos: BR-101 e BR-116 demandam atenção por escala, enquanto BR-316, BR-230 e BR-153 demandam atenção por risco por evento.
 
 ### 7.2 Pergunta 2 — Horário do dia e gravidade dos acidentes
 
-![Gravidade por fase do dia](images/grafico2_fase_dia.png)
+![Gravidade por fase do dia](grafico2_fase_dia.png)
 
 Existe relação clara entre horário e gravidade. O período "Pleno dia" concentra 55% dos acidentes, mas apresenta a menor gravidade proporcional (0,0594). Já o "Amanhecer" apresenta o maior índice de gravidade (0,1363) — mais que o dobro do período diurno — mesmo com volume bem menor. O período "Plena Noite" também apresenta gravidade elevada (0,116). Esse padrão é coerente com fatores de risco já documentados na literatura de segurança viária, como sonolência, velocidades mais altas (menor tráfego) e menor visibilidade.
 
 ### 7.3 Pergunta 3 — Causas de acidentes e relação com vítimas
 
-![Causas mais letais](images/grafico3_causas.png)
+![Causas mais letais](grafico3_causas.png)
 
 As causas mais frequentes (reação tardia, ausência de reação, acessar via sem observar) respondem por cerca de 40% dos acidentes, com gravidade moderada (0,058 a 0,073). Já causas menos frequentes apresentam gravidade desproporcionalmente maior: "Transitar na contramão" tem índice de 0,3758 (mais de 6 vezes a média das causas mais comuns), e "Ultrapassagem Indevida" tem 0,2259. Isso sugere que ações de fiscalização voltadas a essas duas causas específicas têm potencial de reduzir mortes de forma desproporcional ao número de ocorrências evitadas.
 
 ### 7.4 Pergunta 4 — Dias de semana vs. Finais de semana
 
-![Dias de semana vs fim de semana](images/grafico4_fimdesemana.png)
+![Dias de semana vs fim de semana](grafico4_fimdesemana.png)
 
 Após normalização pelo número de dias em cada categoria (783 dias úteis vs. 313 dias de fim de semana no período), constatou-se que os finais de semana apresentam, em média, 19% mais acidentes por dia (219,73 vs. 184,77) e 31% maior gravidade por acidente (índice 0,0994 vs. 0,076). O padrão é coerente com maior consumo de álcool, viagens de lazer e maior cansaço em deslocamentos de fim de semana.
 
 ### 7.5 Pergunta 5 — Quantidade de veículos e gravidade do acidente
 
-![Gravidade x quantidade de veículos](images/grafico5_veiculos.png)
+![Gravidade x quantidade de veículos](grafico5_veiculos.png)
 
 Observa-se uma relação quase monotônica: quanto maior o número de veículos envolvidos, maior a gravidade do acidente. Acidentes com 1 veículo têm índice de 0,0391, subindo para 0,083 com 2 veículos, e ultrapassando 0,20 a partir de 5 veículos envolvidos — mais de 5 vezes a gravidade de um acidente isolado. Esse resultado reforça a relevância de causas como "condutor deixou de manter distância do veículo da frente" (identificada na Pergunta 3), associada a colisões múltiplas.
 
