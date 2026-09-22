@@ -44,7 +44,7 @@ O conjunto "agrupado por pessoa" (que permitiria granularidade de vítima/veícu
 
 ### 2.3 Coleta
 
-Os 3 arquivos CSV foram baixados manualmente do portal oficial da PRF e carregados via upload direto para um **Volume do Unity Catalog** no Databricks (`prf_acidentes.bronze.raw_files`), preservando o arquivo original em sua forma bruta.
+Os 3 arquivos CSV foram baixados manualmente do portal oficial da PRF e carregados via upload direto para um **Volume do Unity Catalog** no Databricks (`prf_acidentes1.bronze.raw_files`), preservando o arquivo original em sua forma bruta.
 
 **Total de registros coletados: 213.451 acidentes.**
 
@@ -52,13 +52,13 @@ Os 3 arquivos CSV foram baixados manualmente do portal oficial da PRF e carregad
 
 ## 3️⃣ Arquitetura e Pipeline (Arquitetura Medalhão)
 
-O pipeline foi construído na plataforma **Databricks Free Edition**, utilizando **Delta Lake** como formato de tabela e **Unity Catalog** para organização dos dados. Foi adotada a Arquitetura Medalhão (Bronze / Silver / Gold), com um catálogo único (`prf_acidentes`) e três schemas correspondentes a cada camada.
+O pipeline foi construído na plataforma **Databricks Free Edition**, utilizando **Delta Lake** como formato de tabela e **Unity Catalog** para organização dos dados. Foi adotada a Arquitetura Medalhão (Bronze / Silver / Gold), com um catálogo único (`prf_acidentes1`) e três schemas correspondentes a cada camada.
 
 ### 3.1 Camada Bronze — dado bruto
 
 Os 3 arquivos CSV foram lidos sem inferência de schema (todas as colunas como `string`) e unidos (`union`) em uma única tabela, preservando o dado exatamente como recebido da fonte. Foram adicionadas colunas de controle — `_ano_referencia`, `_arquivo_origem` e `_data_ingestao` — para fins de linhagem.
 
-- Tabela: `prf_acidentes.bronze.acidentes_raw`
+- Tabela: `prf_acidentes1.bronze.acidentes_raw`
 - Total de linhas: **213.451**
 
 ### 3.2 Camada Silver — dado limpo e padronizado
@@ -72,7 +72,7 @@ A partir da Bronze, foram aplicadas as seguintes transformações de limpeza e p
 - Criação da flag booleana `flag_fim_de_semana` a partir de `dia_semana`.
 - Decomposição do atributo multivalorado `tracado_via` em 12 colunas booleanas.
 
-- Tabela: `prf_acidentes.silver.acidentes_limpo` — **213.451 linhas** (nenhuma linha perdida no processo).
+- Tabela: `prf_acidentes1.silver.acidentes_limpo` — **213.451 linhas** (nenhuma linha perdida no processo).
 
 ### 3.3 Camada Gold — Esquema Estrela
 
@@ -271,6 +271,10 @@ O carregamento dos dados entre as camadas (Bronze → Silver → Gold) foi reali
 
 ## 6️⃣ Análise de Qualidade de Dados
 
+O código completo desta análise está no notebook [`04_analise_qualidade.ipynb`](https://github.com/Rafaela-neves/MVP-Rafaela-Neves/blob/main/04_analise_qualidade.ipynb), organizado em 3 blocos de checagem. Abaixo, cada subseção traz o print de código + resultado correspondente.
+
+![Checagem 1 — carregamento das tabelas Silver e Gold para conferência](qualidade_01_carga_silver_gold.png)
+
 ### 6.1 Duplicidade e valores nulos
 
 Foi verificada a unicidade da chave `id` na camada Bronze: 213.451 linhas e 213.451 IDs distintos — **nenhuma duplicata encontrada**. Também não foram encontrados valores nulos ou vazios em nenhuma das colunas do dataset bruto.
@@ -288,6 +292,12 @@ Identificou-se que o campo `tracado_via` não representa uma categoria única, m
 
 Verificou-se se o campo `pessoas` corresponde à soma de `mortos + feridos_leves + feridos_graves + ilesos + ignorados`:
 
+![Checagem 1 — cálculo da diferença entre pessoas e soma dos estados](qualidade_02_calculo_diferenca.png)
+![Checagem 1 — amostra de linhas com divergência](qualidade_03_tabela_divergencias.png)
+![Checagem 1 — teste do padrão diferença = 1 − ignorados](qualidade_04_teste_padrao.png)
+![Checagem 1 — grupo residual sem padrão identificável](qualidade_05_grupo_residual_codigo.png)
+![Checagem 1 — distribuição das divergências do grupo residual](qualidade_06_grupo_residual_tabela.png)
+
 | Grupo                                          | Quantidade | % do total | Observação                                                                                                                    |
 | ------------------------------------------------ | ---------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | Consistente (diferença = 0)                    | 201.977    | 94,64%     | Nenhuma ação necessária                                                                                                       |
@@ -300,9 +310,15 @@ Verificou-se se o campo `pessoas` corresponde à soma de `mortos + feridos_leves
 
 Todas as 27 siglas de UF encontradas são válidas, sem valores nulos ou inconsistentes. Na coluna `br`, foram identificados **513 registros com valor "0"** (não identificado, sempre acompanhados de `km = 0.0`) e **1 registro com valor "498"** (provável erro de digitação, sem correspondência a uma rodovia federal conhecida). Esses 514 registros (0,24% do total) foram excluídos apenas das análises agregadas "por BR" (Pergunta de negócio 1), sendo mantidos intactos nas tabelas.
 
+![Checagem 2 — distribuição de UF e valores de BR fora do intervalo plausível](qualidade_07_ufs_br_codigo.png)
+![Checagem 2 — contagem completa por UF e BRs inválidas](qualidade_08_ufs_br_tabela.png)
+![Checagem 2 — detalhe dos registros com br=0 e br=498](qualidade_09_detalhe_br0_br498.png)
+
 ### 6.6 Integridade referencial na camada Gold
 
 Após a criação da tabela `fato_acidente` via junção com as 5 dimensões, foi confirmado que o total de linhas (213.451) e o total de `id_acidente` distintos (213.451) permanecem idênticos, comprovando que nenhum dos *joins* gerou duplicação ou perda de registros.
+
+![Checagem 3 — verificação de duplicatas na fato_acidente após os joins](qualidade_10_duplicatas_gold.png)
 
 O detalhamento completo (com os resultados de cada query) está no notebook [`04_analise_qualidade.ipynb`](https://github.com/Rafaela-neves/MVP-Rafaela-Neves/blob/main/04_analise_qualidade.ipynb).
 
