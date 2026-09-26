@@ -34,9 +34,11 @@ Este trabalho tem como propósito entender os principais padrões e fatores asso
 
 Os dados utilizados são públicos e provenientes do **Portal de Dados Abertos da Polícia Rodoviária Federal (PRF)**, gerados pelo sistema BR-Brasil, em operação nacional desde 2007.
 
-🔗 Portal: <https://portal.prf.gov.br/dados-abertos-acidentes>
-🔗 Dicionário de variáveis: <https://portal.prf.gov.br/dados-abetos-dicionario-acidentes>
-📄 Licença: dado governamental aberto, sujeito à Lei de Acesso à Informação (Lei nº 12.527/2011) e ao Decreto nº 8.777/2016 (Política de Dados Abertos do Executivo Federal).
+Portal: <https://portal.prf.gov.br/dados-abertos-acidentes>
+
+Dicionário de variáveis: <https://portal.prf.gov.br/dados-abetos-dicionario-acidentes>
+
+Licença: dado governamental aberto, sujeito à Lei de Acesso à Informação (Lei nº 12.527/2011) e ao Decreto nº 8.777/2016 (Política de Dados Abertos do Executivo Federal).
 
 ### 2.2 Conjunto de dados utilizado
 
